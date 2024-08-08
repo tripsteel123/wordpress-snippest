@@ -1,4 +1,3 @@
-
 <?php
 /*
 Plugin Name: My Media Library Plugin
@@ -6,8 +5,16 @@ Description: A plugin to upload files using the WordPress Media Library.
 Version: 1.0
 Author: Your Name
 */
-
-// افزودن منو به داشبورد مدیریت وردپرس
+define('ZLM_PLG_URL' , plugin_dir_url( __FILE__ ));
+// اضافه کردن اسکریپت های لازم
+add_action('admin_enqueue_scripts', 'mmlp_enqueue_scripts');
+function mmlp_enqueue_scripts($hook) {
+    if ($hook != 'toplevel_page_media-library-uploader') {
+        return;
+    }
+    wp_enqueue_media();
+    wp_enqueue_script('mmlp_script', plugins_url('mmlp-script.js', __FILE__), array('jquery'), null, true);
+}
 add_action('admin_menu', 'mmlp_add_admin_menu');
 function mmlp_add_admin_menu() {
     add_menu_page('Media Library Uploader', 'Media Library Uploader', 'manage_options', 'media-library-uploader', 'mmlp_page_content', 'dashicons-upload', 26);
@@ -56,16 +63,18 @@ function mmlp_settings_section_callback() {
 
 function mmlp_file_render() {
     $options = get_option('mmlp_options');
+    $file_id = isset($options['mmlp_file']) ? $options['mmlp_file'] : '';
     ?>
-    <input type="hidden" id="mmlp_file" name="mmlp_options[mmlp_file]" value="<?php echo $options['mmlp_file']; ?>" />
+    <input type="hidden" id="mmlp_file" name="mmlp_options[mmlp_file]" value="<?php echo esc_attr($file_id); ?>" />
     <button type="button" class="button" id="mmlp_file_button">Select File</button>
     <div id="mmlp_file_preview">
-        <?php if ($options['mmlp_file']): ?>
-            <img src="<?php echo wp_get_attachment_url($options['mmlp_file']); ?>" style="max-width: 300px;" />
+        <?php if ($file_id): ?>
+            <img src="<?php echo esc_url(wp_get_attachment_url($file_id)); ?>" style="max-width: 300px;" />
         <?php endif; ?>
     </div>
     <?php
 }
+
 
 // اضافه کردن اسکریپت های لازم
 add_action('admin_enqueue_scripts', 'mmlp_enqueue_scripts');
@@ -76,5 +85,3 @@ function mmlp_enqueue_scripts($hook) {
     wp_enqueue_media();
     wp_enqueue_script('mmlp_script', plugins_url('mmlp-script.js', __FILE__), array('jquery'), null, true);
 }
-?>
-
