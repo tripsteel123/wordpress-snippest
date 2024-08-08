@@ -15,7 +15,10 @@ jQuery(document).ready(function ($) {
             button: {
                 text: 'Use this media'
             },
-            multiple: false
+            multiple: false,
+            library: {
+                type: ['image']
+            }
         });
 
         // انتخاب فایل
