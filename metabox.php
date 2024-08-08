@@ -1,3 +1,4 @@
+<?php
 function add_course_meta_boxes() {
     add_meta_box(
         'course_details',
