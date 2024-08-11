@@ -1,1 +1,21 @@
 
+<table class="playlist_table" style="width:35%">
+    <thead>
+        <tr>
+            <th></th>
+            <th>#</th>
+            <th>Title</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach (range(1,20) as $index ) : ?>
+        <tr>
+            <td  ><span style="cursor: all-scroll" class="dashicons dashicons-move"></span></td>
+            <td><?php echo $index ?></td>
+            <td><input type="text" name="title_sample"></td>
+            <td><span class="dashicons dashicons-trash"></span></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
