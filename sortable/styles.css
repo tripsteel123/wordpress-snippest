@@ -1,1 +1,12 @@
-
+.playlist_table {
+    border-collapse: collapse;
+}
+.playlist_table tr {
+    transition: 0.3s ease-in;
+}
+.playlist_table tbody tr:nth-child(even) {
+    background: rgba(30, 144, 255, 0.09);
+}
+.playlist_table tr.deleting {
+    background: rgba(255, 0, 0, 0.12) !important;
+}
