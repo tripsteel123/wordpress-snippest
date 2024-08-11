@@ -10,3 +10,7 @@ function add_course_meta_boxes() {
     );
 }
 add_action('add_meta_boxes', 'add_course_meta_boxes');
+
+function render_course_playlist_meta_box($post) {
+    include view.html;
+}
