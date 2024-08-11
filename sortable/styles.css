@@ -1,12 +1,12 @@
-table.playlist_table {
+.playlist_table {
     border-collapse: collapse;
 }
-table.playlist_table tr {
-    transition: 0.3s ease-in;
+.playlist_table tr {
+    transition: 0.3s background ease-in;
 }
-table.playlist_table tbody tr:nth-child(even) {
+.playlist_table tbody tr:nth-child(even) {
     background: rgba(30, 144, 255, 0.09);
 }
-table.playlist_table tr.deleting {
+.playlist_table tr.deleting {
     background: rgba(255, 0, 0, 0.12) !important;
 }
