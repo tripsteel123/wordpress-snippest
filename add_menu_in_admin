@@ -21,9 +21,25 @@ function vip_users_management_page() {
         <form method="post" action="">
             <table class="form-table">
                 <tr valign="top">
-                    <th scope="row">افزودن کاربر VIP</th>
+                    <th scope="row">نام کامل</th>
                     <td>
-                        <input type="text" name="vip_user_email" placeholder="ایمیل کاربر" required />
+                        <input type="text" name="vip_user_full_name" placeholder="نام کامل" required />
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <th scope="row">تاریخ تولد</th>
+                    <td>
+                        <input type="date" name="vip_user_dob" required />
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <th scope="row">ایمیل</th>
+                    <td>
+                        <input type="email" name="vip_user_email" placeholder="ایمیل کاربر" required />
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td colspan="2">
                         <input type="submit" name="add_vip_user" class="button button-primary" value="افزودن" />
                     </td>
                 </tr>
@@ -33,11 +49,15 @@ function vip_users_management_page() {
         // پردازش فرم برای افزودن کاربر VIP
         if (isset($_POST['add_vip_user'])) {
             $user_email = sanitize_email($_POST['vip_user_email']);
+            $full_name = sanitize_text_field($_POST['vip_user_full_name']);
+            $dob = sanitize_text_field($_POST['vip_user_dob']);
             $user = get_user_by('email', $user_email);
 
             if ($user) {
-                // اضافه کردن متا داده برای مشخص کردن کاربر به عنوان VIP
+                // ذخیره متا داده‌های VIP
                 update_user_meta($user->ID, 'is_vip', true);
+                update_user_meta($user->ID, 'vip_full_name', $full_name);
+                update_user_meta($user->ID, 'vip_dob', $dob);
                 echo '<div class="notice notice-success is-dismissible"><p>کاربر با موفقیت به لیست VIP اضافه شد.</p></div>';
             } else {
                 echo '<div class="notice notice-error is-dismissible"><p>کاربر یافت نشد. لطفاً ایمیل صحیح وارد کنید.</p></div>';
@@ -52,11 +72,20 @@ function vip_users_management_page() {
 
         if (!empty($vip_users)) {
             echo '<h2>لیست کاربران VIP</h2>';
-            echo '<ul>';
+            echo '<table class="widefat fixed">';
+            echo '<thead><tr><th>نام کامل</th><th>تاریخ تولد</th><th>ایمیل</th></tr></thead>';
+            echo '<tbody>';
             foreach ($vip_users as $vip_user) {
-                echo '<li>' . esc_html($vip_user->user_email) . '</li>';
+                $full_name = get_user_meta($vip_user->ID, 'vip_full_name', true);
+                $dob = get_user_meta($vip_user->ID, 'vip_dob', true);
+                echo '<tr>';
+                echo '<td>' . esc_html($full_name) . '</td>';
+                echo '<td>' . esc_html($dob) . '</td>';
+                echo '<td>' . esc_html($vip_user->user_email) . '</td>';
+                echo '</tr>';
             }
-            echo '</ul>';
+            echo '</tbody>';
+            echo '</table>';
         } else {
             echo '<p>هنوز هیچ کاربر VIPی ثبت نشده است.</p>';
         }
@@ -64,4 +93,3 @@ function vip_users_management_page() {
     </div>
     <?php
 }
-
