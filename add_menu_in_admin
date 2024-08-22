@@ -10,6 +10,16 @@ function vip_users_admin_menu() {
         'dashicons-star-filled', // آیکون منو
         6 // موقعیت منو
     );
+
+    // زیرمنوی نمایش کاربران VIP
+    add_submenu_page(
+        'vip-users', // شناسه منوی والد
+        'لیست کاربران VIP', // عنوان صفحه
+        'نمایش کاربران VIP', // عنوان زیرمنو
+        'manage_options', // قابلیت دسترسی
+        'vip-users-list', // شناسه زیرمنو
+        'vip_users_list_page' // تابع برای نمایش محتوا
+    );
 }
 add_action('admin_menu', 'vip_users_admin_menu');
 
