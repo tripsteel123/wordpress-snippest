@@ -1,5 +1,4 @@
 <?php
-
 register_activation_hook(__FILE__, 'management_users_activate');
 function management_users_activate()
 {
@@ -19,7 +18,6 @@ function management_users_activate()
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta( $sql );
 }
-
 ## delete table in deactive plugin
 register_deactivation_hook(__FILE__, 'management_users_deactivate');
 function management_users_deactivate() {
@@ -27,4 +25,3 @@ function management_users_deactivate() {
     $tbl_name = $wpdb->prefix . "prousers";
     $wpdb->query("DROP TABLE IF EXISTS $tbl_name");
 }
-
