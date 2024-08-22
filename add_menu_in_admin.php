@@ -55,51 +55,8 @@ function vip_users_management_page() {
                 </tr>
             </table>
         </form>
-        <?php
-        // پردازش فرم برای افزودن کاربر VIP
-        if (isset($_POST['add_vip_user'])) {
-            $user_email = sanitize_email($_POST['vip_user_email']);
-            $full_name = sanitize_text_field($_POST['vip_user_full_name']);
-            $dob = sanitize_text_field($_POST['vip_user_dob']);
-            $user = get_user_by('email', $user_email);
-
-            if ($user) {
-                // ذخیره متا داده‌های VIP
-                update_user_meta($user->ID, 'is_vip', true);
-                update_user_meta($user->ID, 'vip_full_name', $full_name);
-                update_user_meta($user->ID, 'vip_dob', $dob);
-                echo '<div class="notice notice-success is-dismissible"><p>کاربر با موفقیت به لیست VIP اضافه شد.</p></div>';
-            } else {
-                echo '<div class="notice notice-error is-dismissible"><p>کاربر یافت نشد. لطفاً ایمیل صحیح وارد کنید.</p></div>';
-            }
-        }
-
-        // نمایش لیست کاربران VIP
-        $vip_users = get_users(array(
-            'meta_key' => 'is_vip',
-            'meta_value' => true
-        ));
-
-        if (!empty($vip_users)) {
-            echo '<h2>لیست کاربران VIP</h2>';
-            echo '<table class="widefat fixed">';
-            echo '<thead><tr><th>نام کامل</th><th>تاریخ تولد</th><th>ایمیل</th></tr></thead>';
-            echo '<tbody>';
-            foreach ($vip_users as $vip_user) {
-                $full_name = get_user_meta($vip_user->ID, 'vip_full_name', true);
-                $dob = get_user_meta($vip_user->ID, 'vip_dob', true);
-                echo '<tr>';
-                echo '<td>' . esc_html($full_name) . '</td>';
-                echo '<td>' . esc_html($dob) . '</td>';
-                echo '<td>' . esc_html($vip_user->user_email) . '</td>';
-                echo '</tr>';
-            }
-            echo '</tbody>';
-            echo '</table>';
-        } else {
-            echo '<p>هنوز هیچ کاربر VIPی ثبت نشده است.</p>';
-        }
-        ?>
     </div>
     <?php
 }
+
+
