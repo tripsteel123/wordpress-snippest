@@ -1,0 +1,67 @@
+<?php
+// اضافه کردن منوی مدیریت کاربران VIP
+function vip_users_admin_menu() {
+    add_menu_page(
+        'مدیریت کاربران VIP', // عنوان صفحه
+        'کاربران VIP', // عنوان منو
+        'manage_options', // قابلیت دسترسی
+        'vip-users', // شناسه منو
+        'vip_users_management_page', // تابع برای نمایش محتوا
+        'dashicons-star-filled', // آیکون منو
+        6 // موقعیت منو
+    );
+}
+add_action('admin_menu', 'vip_users_admin_menu');
+
+// نمایش صفحه مدیریت کاربران VIP
+function vip_users_management_page() {
+    ?>
+    <div class="wrap">
+        <h1>مدیریت کاربران VIP</h1>
+        <form method="post" action="">
+            <table class="form-table">
+                <tr valign="top">
+                    <th scope="row">افزودن کاربر VIP</th>
+                    <td>
+                        <input type="text" name="vip_user_email" placeholder="ایمیل کاربر" required />
+                        <input type="submit" name="add_vip_user" class="button button-primary" value="افزودن" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <?php
+        // پردازش فرم برای افزودن کاربر VIP
+        if (isset($_POST['add_vip_user'])) {
+            $user_email = sanitize_email($_POST['vip_user_email']);
+            $user = get_user_by('email', $user_email);
+
+            if ($user) {
+                // اضافه کردن متا داده برای مشخص کردن کاربر به عنوان VIP
+                update_user_meta($user->ID, 'is_vip', true);
+                echo '<div class="notice notice-success is-dismissible"><p>کاربر با موفقیت به لیست VIP اضافه شد.</p></div>';
+            } else {
+                echo '<div class="notice notice-error is-dismissible"><p>کاربر یافت نشد. لطفاً ایمیل صحیح وارد کنید.</p></div>';
+            }
+        }
+
+        // نمایش لیست کاربران VIP
+        $vip_users = get_users(array(
+            'meta_key' => 'is_vip',
+            'meta_value' => true
+        ));
+
+        if (!empty($vip_users)) {
+            echo '<h2>لیست کاربران VIP</h2>';
+            echo '<ul>';
+            foreach ($vip_users as $vip_user) {
+                echo '<li>' . esc_html($vip_user->user_email) . '</li>';
+            }
+            echo '</ul>';
+        } else {
+            echo '<p>هنوز هیچ کاربر VIPی ثبت نشده است.</p>';
+        }
+        ?>
+    </div>
+    <?php
+}
+
