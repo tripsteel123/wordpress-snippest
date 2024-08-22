@@ -58,5 +58,65 @@ function vip_users_management_page() {
     </div>
     <?php
 }
+## for proccesss data
+add_action('admin_init', 'form_submit');
+function form_submit() {
+    global $pagenow;
+    if ($pagenow == 'admin.php' && isset($_GET['page']) && $_GET['page'] == 'vip-users') {
+       if (isset($_POST['add_vip_user'])) {
+           $full_name = $_POST['vip_user_full_name'];
+           $email = $_POST['vip_user_email'];
+           $birthday = $_POST['vip_user_dob'];
+           global $wpdb;
+           $data = [
+               'full_name' => $full_name,
+               'email' => $email,
+               'birthday' => $birthday
+           ];
+           $inserted = $wpdb->insert($wpdb->prefix."prousers" , $data  , ['%s', '%s', '%s']);
+           if ($inserted) {
+               $user_id = $wpdb->insert_id;
+               wp_safe_redirect(admin_url() . "admin.php?page=vip-users&status=success&user_inserted=$user_id");
+           }else{
 
+           }
+       }
+    }
+}
 
+## code for page submenu : 
+
+// تابع نمایش لیست کاربران VIP در زیرمنو
+function vip_users_list_page() {
+    ?>
+    <div class="wrap">
+        <h1>لیست کاربران VIP</h1>
+        <?php
+        // واکشی لیست کاربران VIP
+        $vip_users = get_users(array(
+            'meta_key' => 'is_vip',
+            'meta_value' => true
+        ));
+
+        if (!empty($vip_users)) {
+            echo '<table class="widefat fixed striped">';
+            echo '<thead><tr><th>نام کامل</th><th>تاریخ تولد</th><th>ایمیل</th></tr></thead>';
+            echo '<tbody>';
+            foreach ($vip_users as $vip_user) {
+                $full_name = get_user_meta($vip_user->ID, 'vip_full_name', true);
+                $dob = get_user_meta($vip_user->ID, 'vip_dob', true);
+                echo '<tr>';
+                echo '<td>' . esc_html($full_name) . '</td>';
+                echo '<td>' . esc_html($dob) . '</td>';
+                echo '<td>' . esc_html($vip_user->user_email) . '</td>';
+                echo '</tr>';
+            }
+            echo '</tbody>';
+            echo '</table>';
+        } else {
+            echo '<p>هنوز هیچ کاربر VIPی ثبت نشده است.</p>';
+        }
+        ?>
+    </div>
+    <?php
+}
