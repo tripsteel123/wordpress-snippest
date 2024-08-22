@@ -2,6 +2,8 @@
 ## For Proper Ridirect ##
 add_action('admin_init', 'form_submit');
 ## For Proper Ridirect ##
+
+
 function form_submit() {
     global $pagenow;
     if ($pagenow == 'admin.php' && isset($_GET['page']) && $_GET['page'] == 'vip-users') {
