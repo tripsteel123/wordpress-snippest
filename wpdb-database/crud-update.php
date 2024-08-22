@@ -18,8 +18,10 @@ $where_format = ["%d];
 // اجرای عملیات به‌روزرسانی
 $updated = $wpdb->update( $table_name, $data, $where , $format, $where_format  );
 
-if ( $updated !== false ) {
-    echo 'داده‌ها با موفقیت به‌روزرسانی شدند!';
+if ( $updated === false ) {
+    echo 'دخطا در ثیب ذلذع!';
+} elseif($updated === 0) {
+    echo 'هیچ داده ای تغییر نکرد';
 } else {
-    echo 'خطا در به‌روزرسانی داده‌ها!';
+    echo "Upodated Ok!";
 }
