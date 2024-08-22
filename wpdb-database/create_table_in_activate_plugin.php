@@ -20,3 +20,11 @@ function management_users_activate()
     dbDelta( $sql );
 }
 
+## delete table in deactive plugin
+register_deactivation_hook(__FILE__, 'management_users_deactivate');
+function management_users_deactivate() {
+    global $wpdb;
+    $tbl_name = $wpdb->prefix . "prousers";
+    $wpdb->query("DROP TABLE IF EXISTS $tbl_name");
+}
+
